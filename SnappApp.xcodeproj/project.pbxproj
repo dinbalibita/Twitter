@@ -109,8 +109,9 @@
 			children = (
 				848D296427DD1F4A0078CAA6 /* Extensions */,
 				84A3918E27DB0EE400F1C91E /* Network */,
-				84AFE3B927DA8D2200FF7E34 /* Domain */,
+				84AFE3B927DA8D2200FF7E34 /* Features */,
 				8454BB7A27D9D00800A6F979 /* AppDelegate.swift */,
+				84E9156127DE2BC80052865B /* AppCoordinator.swift */,
 				8454BB7C27D9D00800A6F979 /* SceneDelegate.swift */,
 				8454BB8027D9D00800A6F979 /* Main.storyboard */,
 				8454BB8327D9D00A00A6F979 /* Assets.xcassets */,
@@ -167,22 +168,13 @@
 			path = "Tweeter Detail";
 			sourceTree = "<group>";
 		};
-		84AFE3B927DA8D2200FF7E34 /* Domain */ = {
+		84AFE3B927DA8D2200FF7E34 /* Features */ = {
 			isa = PBXGroup;
 			children = (
-				84E9155A27DDE0E10052865B /* Cordinator */,
 				84AFE39C27DA73FE00FF7E34 /* Tweeter Detail */,
 				8454BB9327D9DCD700A6F979 /* TweeterList */,
 			);
-			path = Domain;
-			sourceTree = "<group>";
-		};
-		84E9155A27DDE0E10052865B /* Cordinator */ = {
-			isa = PBXGroup;
-			children = (
-				84E9156127DE2BC80052865B /* AppCoordinator.swift */,
-			);
-			path = Cordinator;
+			path = Features;
 			sourceTree = "<group>";
 		};
 		C1F51FD816C879ED1EF41B6A /* Frameworks */ = {
