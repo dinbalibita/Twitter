@@ -12,14 +12,14 @@ class TweetDetailViewController: UIViewController {
     let mainIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
     
     private var tweetId: String
-    private let service: TwitterService?
+    private let service: TwitterServiceProtocol?
     private var tweet: Tweet?
     
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var createdDateLabel: UILabel!
     @IBOutlet weak var sourceLabel: UILabel!
     
-    init(tweetId: String, service: TwitterService) {
+    init(tweetId: String, service: TwitterServiceProtocol) {
         self.tweetId = tweetId
         self.service = service
         super.init(nibName: nil, bundle: nil)

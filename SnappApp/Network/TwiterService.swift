@@ -9,8 +9,6 @@ import Foundation
 
 protocol TwitterServiceProtocol {
     
-    var hasKeyword: Bool { get }
-    
     func filteredStream(_ onStream: @escaping (Tweet) -> Void, onError: ((Error) -> Void)?)
     func applyKeyword(_ keyword: String, _ completion: @escaping (Error?) -> Void)
     func getTweet(id: String, onResult: @escaping (Tweet) -> Void, onError: ((Error) -> Void)?)
@@ -28,17 +26,14 @@ class TwitterService: TwitterServiceProtocol {
             UserDefaults.standard.set(newValue, forKey: "lastRuleID")
         }
     }
-    var hasKeyword: Bool {
-        lastRuleID != nil
-    }
     
     init(networkLayer: NetworkLayerProtocol) {
         self.networkLayer = networkLayer
     }
     
     func getTweet(id: String, onResult: @escaping (Tweet) -> Void, onError: ((Error) -> Void)?) {
-        let te = "https://api.twitter.com/2/tweets/\(id)?"
-        var components = URLComponents(string: te)!
+        let url = "https://api.twitter.com/2/tweets/\(id)?"
+        var components = URLComponents(string: url)!
         components.queryItems = [
             URLQueryItem(name: "tweet.fields", value: "id,created_at,text,public_metrics,source")
         ]

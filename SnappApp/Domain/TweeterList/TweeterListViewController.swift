@@ -23,9 +23,9 @@ class TweeterListTableViewController: UITableViewController {
     
     private var tweets: [Tweet] = []
     
-    private let service: TwitterService?
+    private let service: TwitterServiceProtocol?
     
-    init(service: TwitterService) {
+    init(service: TwitterServiceProtocol) {
         self.service = service
         super.init(nibName: nil, bundle: nil)
     }
@@ -86,10 +86,6 @@ class TweeterListTableViewController: UITableViewController {
         } onError: { error in
             print(error)
         }
-    }
-    
-    override func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UITableView.automaticDimension
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
