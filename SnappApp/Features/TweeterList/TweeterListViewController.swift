@@ -19,7 +19,7 @@ class TweeterListTableViewController: UITableViewController {
     private let mainIndicator = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.medium)
     private let searchController = UISearchController(searchResultsController: nil)
     
-    private var isSearching: Bool = false
+    private var isSearching: Bool = true
     
     private var tweets: [Tweet] = []
     
@@ -79,7 +79,7 @@ class TweeterListTableViewController: UITableViewController {
         guard let service = service else { return }
         
         service.filteredStream { [unowned self] tweet in
-            guard isSearching else { return }
+            guard !isSearching else { return }
             mainIndicator.stopAnimating()
             tweets.insert(tweet, at: 0)
             tableView.insertRows(at: [IndexPath(row: 0, section: 0)], with: .fade)
@@ -103,7 +103,7 @@ class TweeterListTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         view.endEditing(true)
         
-        isSearching = false
+        isSearching = true
         
         delegate?.twitterListTableController(didSelectTweet: self.tweets[indexPath.row].id)
     }
@@ -121,7 +121,7 @@ class TweeterListTableViewController: UITableViewController {
 extension TweeterListTableViewController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        isSearching = false
+        isSearching = true
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -129,11 +129,11 @@ extension TweeterListTableViewController: UISearchBarDelegate {
         guard let service = service else { return }
         guard let text = searchBar.text else { return }
         mainIndicator.startAnimating()
-        isSearching = true
         tweets.removeAll()
         tableView.reloadData()
         service.applyKeyword(text) { error in
             guard let error = error else { return }
+            self.isSearching = false
             print(error)
         }
     }
