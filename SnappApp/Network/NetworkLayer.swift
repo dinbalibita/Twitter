@@ -48,7 +48,9 @@ class NetworkLayer: NSObject, NetworkLayerProtocol {
         var request = request
         attachHttpHeaders(to: &request)
         let cancellable = session.dataTask(with: request) { data, _, error in
-            completion?(data, error)
+            DispatchQueue.main.async {
+                completion?(data, error)
+            }
         }
         defer { cancellable.resume() }
         return cancellable
@@ -69,11 +71,15 @@ extension NetworkLayer: URLSessionDataDelegate {
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
         if dataTask.state != .canceling {
-            streamClosure?(data, nil)
+            DispatchQueue.main.async {
+                self.streamClosure?(data, nil)
+            }
         }
     }
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        streamClosure?(nil, error)
+        DispatchQueue.main.async {
+            self.streamClosure?(nil, error)
+        }
     }
 }
