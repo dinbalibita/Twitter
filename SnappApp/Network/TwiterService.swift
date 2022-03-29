@@ -31,30 +31,6 @@ class TwitterService: TwitterServiceProtocol {
         self.networkLayer = networkLayer
     }
     
-    func getTweet(id: String, onResult: @escaping (Tweet) -> Void, onError: ((Error) -> Void)?) {
-        let url = "https://api.twitter.com/2/tweets/\(id)?"
-        var components = URLComponents(string: url)!
-        components.queryItems = [
-            URLQueryItem(name: "tweet.fields", value: "id,created_at,text,public_metrics,source")
-        ]
-        var request: URLRequest = URLRequest(url: components.url!)
-        request.httpMethod = "GET"
-        
-        networkLayer.request(request, { data, error in
-            if let error = error {
-                onError?(error)
-            } else if let data = data {
-                do {
-                    let responseObject = try JSONDecoder().decode(BaseResponse<Tweet>.self, from: data)
-                    guard let responseData = responseObject.data else { return }
-                    onResult(responseData)
-                } catch {
-                    onError?(error)
-                }
-            }
-        })
-    }
-    
     func filteredStream(_ onStream: @escaping (Tweet) -> Void, onError: ((Error) -> Void)?) {
         currentStreamRequest?.disconnect()
         
@@ -83,10 +59,11 @@ class TwitterService: TwitterServiceProtocol {
     
     func applyKeyword(_ keyword: String, _ completion: @escaping (Error?) -> Void) {
         removeLastRule { [weak self] error in
+            guard let self = self else { return }
             if let error = error {
                 completion(error)
             } else {
-                self?.addRule(withKeyword: keyword) { error in
+                self.addRule(withKeyword: keyword) { error in
                     if let error = error {
                         completion(error)
                     } else {
@@ -144,6 +121,30 @@ class TwitterService: TwitterServiceProtocol {
                 completion(nil)
             }
         }
+    }
+    
+    func getTweet(id: String, onResult: @escaping (Tweet) -> Void, onError: ((Error) -> Void)?) {
+        let url = "https://api.twitter.com/2/tweets/\(id)?"
+        var components = URLComponents(string: url)!
+        components.queryItems = [
+            URLQueryItem(name: "tweet.fields", value: "id,created_at,text,public_metrics,source")
+        ]
+        var request: URLRequest = URLRequest(url: components.url!)
+        request.httpMethod = "GET"
+        
+        networkLayer.request(request, { data, error in
+            if let error = error {
+                onError?(error)
+            } else if let data = data {
+                do {
+                    let responseObject = try JSONDecoder().decode(BaseResponse<Tweet>.self, from: data)
+                    guard let responseData = responseObject.data else { return }
+                    onResult(responseData)
+                } catch {
+                    onError?(error)
+                }
+            }
+        })
     }
     
 }
