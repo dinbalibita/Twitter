@@ -42,9 +42,10 @@ class TweetDetailViewController: UIViewController {
     }
     
     private func getTweetDetail() {
-        service?.getTweet(id: tweetId, onResult: { [unowned self] tweet in
+        service?.getTweet(id: tweetId, onResult: { [weak self] tweet in
+            guard let self = self else { return }
             self.tweet = tweet
-            setupView()
+            self.setupView()
         }, onError: { error in
             print(error)
         })
